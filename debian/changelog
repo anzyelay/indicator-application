@@ -1,3 +1,10 @@
+indicator-application (13.00.1+20211231.1-0ubuntu1) focal; urgency=medium
+
+  * add ApplicationActivateEvent,
+  * redirect entry_activate to snitem activate method
+
+ -- leixiaoan <leixa@jideos.com>  Fri, 31 Dec 2021 15:35:24 +0800
+
 indicator-application (12.10.1+19.04.20190308.1-0ubuntu2) focal; urgency=medium
 
   * Buid without Werror to fix the build with newer glib versions
