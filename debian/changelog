@@ -1,3 +1,9 @@
+indicator-application (13.00.1+20211231.1-0ubuntu2) focal; urgency=medium
+
+  * add Pantheon show condition to .desktop 
+
+ -- leixiaoan <leixa@jideos.com>  Fri, 31 Dec 2021 16:29:52 +0800
+
 indicator-application (13.00.1+20211231.1-0ubuntu1) focal; urgency=medium
 
   * add ApplicationActivateEvent,
