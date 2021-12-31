@@ -104,6 +104,7 @@ static void indicator_application_dispose    (GObject *object);
 static void indicator_application_finalize   (GObject *object);
 static GList * get_entries (IndicatorObject * io);
 static guint get_location (IndicatorObject * io, IndicatorObjectEntry * entry);
+static void entry_activate (IndicatorObject * io, IndicatorObjectEntry * entry, guint timestamp);
 static void entry_scrolled (IndicatorObject * io, IndicatorObjectEntry * entry, gint delta, IndicatorScrollDirection direction);
 static void entry_secondary_activate (IndicatorObject * io, IndicatorObjectEntry * entry, guint time, gpointer data);
 static void connected (GDBusConnection * con, const gchar * name, const gchar * owner, gpointer user_data);
@@ -142,6 +143,7 @@ indicator_application_class_init (IndicatorApplicationClass *klass)
 	io_class->get_location = get_location;
 	io_class->secondary_activate = entry_secondary_activate;
 	io_class->entry_scrolled = entry_scrolled;
+	io_class->entry_activate = entry_activate;
 
 	return;
 }
@@ -420,6 +422,29 @@ entry_secondary_activate (IndicatorObject * io, IndicatorObjectEntry * entry,
 		                                         app->dbusobject,
 		                                         time),
 		                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+	}
+}
+
+/* Redirect the activate to the Application Item */
+static void 
+entry_activate (IndicatorObject * io, IndicatorObjectEntry * entry, guint timestamp) {
+	g_return_if_fail(IS_INDICATOR_APPLICATION(io));
+
+	IndicatorApplicationPrivate * priv = INDICATOR_APPLICATION_GET_PRIVATE(io);
+	g_return_if_fail(priv->service_proxy);
+
+	GList *l = g_list_find(priv->applications, entry);
+	if (l == NULL)
+		return;
+
+	ApplicationEntry *app = l->data;
+
+	if (app && app->dbusaddress && app->dbusobject && priv->service_proxy) {
+		g_dbus_proxy_call(priv->service_proxy, "ApplicationActivateEvent",
+			              g_variant_new("(ssu)", app->dbusaddress,
+			                                      app->dbusobject,
+		                                         timestamp),
+			              G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
 	}
 }
 

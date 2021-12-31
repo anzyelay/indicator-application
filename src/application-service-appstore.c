@@ -304,6 +304,17 @@ bus_method_call (GDBusConnection * connection, const gchar * sender,
 			                  g_variant_new("(u)", time),
 			                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
 		}
+	} else if (g_strcmp0(method, "ApplicationActivateEvent") == 0) {
+		guint time;
+
+		g_variant_get (params, "(ssu)", &dbusaddress, &dbusmenuobject, &time);
+		app = find_application_by_menu(service, dbusaddress, dbusmenuobject);
+
+		if (app != NULL && app->dbus_proxy != NULL) {
+			g_dbus_proxy_call(app->dbus_proxy, "Activate",
+			                  g_variant_new("(ii)", 0, 0),
+			                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+		}
 	} else {
 		g_warning("Calling method '%s' on the indicator service and it's unknown", method);
 	}
