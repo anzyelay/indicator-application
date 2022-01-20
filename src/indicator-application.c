@@ -708,7 +708,7 @@ application_label_changed (IndicatorApplication * application, gint position, co
 			gtk_menu_detach(app->entry.menu);
 		}
 
-		g_signal_emit(G_OBJECT(application), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED_ID, 0, &(app->entry), TRUE);
+		// g_signal_emit(G_OBJECT(application), INDICATOR_OBJECT_SIGNAL_ENTRY_REMOVED_ID, 0, &(app->entry), TRUE);
 
 		if (app->entry.label != NULL) {
 			gtk_widget_show(GTK_WIDGET(app->entry.label));
@@ -719,7 +719,8 @@ application_label_changed (IndicatorApplication * application, gint position, co
 			gtk_widget_show(GTK_WIDGET(app->entry.image));
 		}
 
-		g_signal_emit(G_OBJECT(application), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED_ID, 0, &(app->entry), TRUE);
+		// g_signal_emit(G_OBJECT(application), INDICATOR_OBJECT_SIGNAL_ENTRY_ADDED_ID, 0, &(app->entry), TRUE);
+		g_signal_emit(G_OBJECT(application), INDICATOR_OBJECT_SIGNAL_SHOW_NOW_CHANGED_ID, 0, &(app->entry), TRUE);
 	}
 
 	return;
